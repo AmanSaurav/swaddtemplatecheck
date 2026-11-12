@@ -2,6 +2,7 @@
 // The cart is a plain object: { dishId: quantity }.
 
 const MAX_PER_DISH = 10;   // F2 will lower this to 10 (kitchen capacity)
+const GST_RATE = 0.05;
 
 // "₹249" -> 249
 function priceValue(price) {
@@ -33,10 +34,12 @@ function cartTotal(cart, menu) {
   return cartLines(cart, menu).reduce((sum, line) => sum + line.lineTotal, 0);
 }
 
-// The bill. For now: food total only. (CR2 adds GST to this function.)
+// The bill.
 function billSummary(cart, menu) {
   const food = cartTotal(cart, menu);
-  return { food: food, total: food };
+  const gst = Number((food * GST_RATE).toFixed(2));
+  const total = Number((food + gst).toFixed(2));
+  return { food, gstRate: GST_RATE, gst, total };
 }
 
 if (typeof module !== "undefined") {
